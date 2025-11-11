@@ -6,8 +6,8 @@ set -e
 
 # ---------- 配置（可自行修改） ----------
 HYSTERIA_VERSION="v2.6.5"
-SERVER_PORT="9013"     		# 监听端口: 如果不设置，则随机生成
-AUTH_PASSWORD="" 			# 随机生成13位密码
+SERVER_PORT="9013"     		# 监听端口: 如果不设置，则随机生成端口
+AUTH_PASSWORD="" 			# 如果不设置，则随机生成13位密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
@@ -20,8 +20,10 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------------- 随机密码 ---------------
 gen_password () {
-	AUTH_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo`
-	echo "${AUTH_PASSWORD}"
+	if [ -z "$AUTH_PASSWORD" ]; then
+		AUTH_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo`
+		echo "${AUTH_PASSWORD}"
+	fi	
 }
 
 # -------------- 随机端口 ---------------
@@ -156,3 +158,4 @@ main() {
 }
 
 main
+
