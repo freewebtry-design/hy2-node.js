@@ -5,6 +5,6 @@
 * Hysteria2版本：2.6.5 
 
 ```
-curl -Ls https://raw.githubusercontent.com/eishare/tuic-hy2-node.js-python/main/hy2.sh | sed 's/\r$//' | bash
+curl -Ls https://raw.githubusercontent.com/freewebtry-design/hy2-node.js/refs/heads/main/hy2.sh | sed 's/\r$//' | bash
 ```
 
