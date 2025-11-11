@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 # Hysteria2 部署脚本 - Shell 版
-# 功能与 Node.js 版基本一致，超低内存 VPS 可用
 
 set -e
 
 # ---------- 配置（可自行修改） ----------
 HYSTERIA_VERSION="v2.6.5"
-SERVER_PORT=<22222>        	# 监听端口，需要替换
-AUTH_PASSWORD="" 			# 生成随机密码
+SERVER_PORT="9013"     		# 监听端口: 如果不设置，则随机生成
+AUTH_PASSWORD="" 			# 随机生成13位密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
@@ -25,7 +24,19 @@ gen_password () {
 	echo "${AUTH_PASSWORD}"
 }
 
-# 检测架构
+# -------------- 随机端口 ---------------
+random_port() { 
+	echo $(( (RANDOM % 40000) + 20000 )) 
+}
+
+gen_port() {
+	if [ -z "$SERVER_PORT" ]; then
+		SERVER_PORT=$(random_port)
+		echo "⚙️ 未提供端口参数，且未设置默认端口时，使用随机端口: $SERVER_PORT"
+	fi
+}
+
+# -------------- 检测架构 ---------------
 arch_name() {
     local machine
     machine=$(uname -m | tr '[:upper:]' '[:lower:]')
@@ -136,6 +147,7 @@ main() {
     download_binary
     ensure_cert
 	gen_password
+	gen_port
     write_config
     SERVER_IP=$(get_server_ip)
     print_connection_info "$SERVER_IP"
