@@ -142,8 +142,8 @@ print_connection_info() {
 main() {
     download_binary
     ensure_cert
-    write_config
 	get_password
+	write_config
     SERVER_IP=$(get_server_ip)
     print_connection_info "$SERVER_IP"
     echo "🚀 启动 Hysteria2 服务器..."
@@ -151,6 +151,7 @@ main() {
 }
 
 main "$@"
+
 
 
 
