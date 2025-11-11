@@ -1,9 +1,0 @@
-{
-  "name": "tuic-vless-node",
-  "version": "1.0.0",
-  "description": "一键部署 TUIC + VLESS Reality",
-  "scripts": {
-    "start": "node node.js"
-  },
-  "dependencies": {}
-}
