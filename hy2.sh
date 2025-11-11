@@ -12,7 +12,7 @@ AUTH_PASSWORD="nbitest0527"   # 建议修改为复杂密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
-ALPN="h3,h2,http/1.1"
+ALPN="h3"
 IP="115.190.180.143"
 #IP="123.207.100.215“
 # ------------------------------
@@ -151,5 +151,6 @@ main() {
 }
 
 main "$@"
+
 
 
