@@ -8,7 +8,7 @@ set -e
 # ---------- 默认配置 ----------
 HYSTERIA_VERSION="v2.6.5"
 DEFAULT_PORT=22222         # 自适应端口
-AUTH_PASSWORD="ieshare2025"   # 建议修改为复杂密码
+AUTH_PASSWORD="nbitest0527"   # 建议修改为复杂密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
@@ -20,12 +20,23 @@ echo "Hysteria2 极简部署脚本（Shell 版）"
 echo "支持命令行端口参数，如：bash hysteria2.sh 443"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
+# ---------- Random Port ----------
+random_port() { 
+	echo $(( (RANDOM % 40000) + 20000 )) 
+}
+
+# -------- Random Password --------
+get_password () {
+	AUTH_PASSWORD = $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo)
+	echo $(AUTH_PASSWORD)
+}
+
 # ---------- 获取端口 ----------
 if [[ $# -ge 1 && -n "${1:-}" ]]; then
     SERVER_PORT="$1"
     echo "✅ 使用命令行指定端口: $SERVER_PORT"
 else
-    SERVER_PORT="${SERVER_PORT:-$DEFAULT_PORT}"
+    SERVER_PORT=$(random_port)
     echo "⚙️ 未提供端口参数，使用默认端口: $SERVER_PORT"
 fi
 
@@ -140,6 +151,7 @@ main() {
     download_binary
     ensure_cert
     write_config
+	get_password
     SERVER_IP=$(get_server_ip)
     print_connection_info "$SERVER_IP"
     echo "🚀 启动 Hysteria2 服务器..."
@@ -147,5 +159,4 @@ main() {
 }
 
 main "$@"
-
 
