@@ -95,8 +95,6 @@ listen: ":${SERVER_PORT}"
 tls:
   cert: "$(pwd)/${CERT_FILE}"
   key: "$(pwd)/${KEY_FILE}"
-  alpn:
-    - "${ALPN}"
 auth:
   type: "password"
   password: "${AUTH_PASSWORD}"
