@@ -35,12 +35,10 @@ get_password () {
 if [[ $# -ge 1 && -n "${1:-}" ]]; then
     SERVER_PORT="$1"
     echo "✅ 使用命令行指定端口: $SERVER_PORT"
-else if [ -z "$SERVER_PORT" ]; then
-    SERVER_PORT=$(random_port)
+fi
+if [ -z "$SERVER_PORT" ]; then
+    SERVER_PORT="$DEFAULT_PORT"
     echo "⚙️ 未提供端口参数，且未设置默认端口时，使用随机端口: $SERVER_PORT"
-else
-    SERVER_PORT=echo "$DEFAULT_PORT"
-	echo "使用默认端口: $SERVER_PORT"
 fi
 
 # ---------- 检测架构 ----------
@@ -162,5 +160,4 @@ main() {
 }
 
 main "$@"
-
 
