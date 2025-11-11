@@ -12,7 +12,7 @@ AUTH_PASSWORD="nbitest0527"   # 建议修改为复杂密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
-ALPN="h2"
+ALPN="h3,h2"
 # ------------------------------
 
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -100,16 +100,6 @@ tls:
 auth:
   type: "password"
   password: "${AUTH_PASSWORD}"
-bandwidth:
-  up: "200mbps"
-  down: "200mbps"
-quic:
-  max_idle_timeout: "10s"
-  max_concurrent_streams: 4
-  initial_stream_receive_window: 65536
-  max_stream_receive_window: 131072
-  initial_conn_receive_window: 131072
-  max_conn_receive_window: 262144
 EOF
     echo "✅ 写入配置 server.yaml（端口=${SERVER_PORT}, SNI=${SNI}, ALPN=${ALPN}）。"
 }
@@ -160,5 +150,4 @@ main() {
 }
 
 main "$@"
-
 
