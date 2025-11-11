@@ -39,6 +39,7 @@ else if [ -z "$SERVER_PORT" ]; then
     SERVER_PORT=$(random_port)
     echo "⚙️ 未提供端口参数，且未设置默认端口时，使用随机端口: $SERVER_PORT"
 else
+    SERVER_PORT=echo "$DEFAULT_PORT"
 	echo "使用默认端口: $SERVER_PORT"
 fi
 
@@ -161,4 +162,5 @@ main() {
 }
 
 main "$@"
+
 
