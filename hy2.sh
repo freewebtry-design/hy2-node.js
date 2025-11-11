@@ -27,7 +27,7 @@ random_port() {
 
 # -------- Random Password --------
 get_password () {
-	AUTH_PASSWORD = $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo)
+	AUTH_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo`
 	echo $(AUTH_PASSWORD)
 }
 
