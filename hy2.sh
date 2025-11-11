@@ -13,6 +13,8 @@ CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
 ALPN="h3,h2,http/1.1"
+IP="115.190.180.143"
+#IP="123.207.100.215“
 # ------------------------------
 
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -104,8 +106,9 @@ EOF
 
 # ---------- 获取服务器 IP ----------
 get_server_ip() {
-    IP=$(curl -s --max-time 10 https://api.ipify.org || echo "YOUR_SERVER_IP")
-    echo "$IP"
+#    IP=$(curl -s --max-time 10 https://api.ipify.org || echo "YOUR_SERVER_IP")
+#    echo "$IP"
+	echo "$(IP)"
 }
 
 # ---------- 打印连接信息 ----------
@@ -148,4 +151,5 @@ main() {
 }
 
 main "$@"
+
 
