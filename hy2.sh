@@ -7,7 +7,7 @@ set -e
 
 # ---------- 默认配置 ----------
 HYSTERIA_VERSION="v2.6.5"
-DEFAULT_PORT=22222         # 自适应端口
+DEFAULT_PORT=9013         	  # DEFAULT 端口
 AUTH_PASSWORD="nbitest0527"   # 建议修改为复杂密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
@@ -35,9 +35,11 @@ get_password () {
 if [[ $# -ge 1 && -n "${1:-}" ]]; then
     SERVER_PORT="$1"
     echo "✅ 使用命令行指定端口: $SERVER_PORT"
-else
+else if [ -z "$SERVER_PORT" ]; then
     SERVER_PORT=$(random_port)
-    echo "⚙️ 未提供端口参数，使用默认端口: $SERVER_PORT"
+    echo "⚙️ 未提供端口参数，且未设置默认端口时，使用随机端口: $SERVER_PORT"
+else
+	echo "使用默认端口: $SERVER_PORT"
 fi
 
 # ---------- 检测架构 ----------
