@@ -1,49 +1,31 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
-# Hysteria2 极简部署脚本（支持命令行端口参数 + 默认跳过证书验证）
-# 适用于超低内存环境（32-64MB）
+# Hysteria2 部署脚本 - Shell 版
+# 功能与 Node.js 版基本一致，超低内存 VPS 可用
 
 set -e
 
-# ---------- 默认配置 ----------
+# ---------- 配置（可自行修改） ----------
 HYSTERIA_VERSION="v2.6.5"
-DEFAULT_PORT=22222         	  # DEFAULT 端口
-AUTH_PASSWORD="nbitest0527"   # 建议修改为复杂密码
+SERVER_PORT=<22222>        	# 监听端口，需要替换
+AUTH_PASSWORD="" 			# 生成随机密码
 CERT_FILE="cert.pem"
 KEY_FILE="key.pem"
 SNI="www.bing.com"
 ALPN="h3"
-IP="115.190.180.143"
-#IP="123.207.100.215“
-# ------------------------------
+# ---------------------------------------
 
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "Hysteria2 极简部署脚本（Shell 版）"
-echo "支持命令行端口参数，如：bash hysteria2.sh 443"
+echo "Hysteria2 部署脚本 - Shell 版"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
-# ---------- Random Port ----------
-random_port() { 
-	echo $(( (RANDOM % 40000) + 20000 )) 
-}
-
-# -------- Random Password --------
-get_password () {
+# -------------- 随机密码 ---------------
+gen_password () {
 	AUTH_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo`
 	echo "${AUTH_PASSWORD}"
 }
 
-# ---------- 获取端口 ----------
-if [[ $# -ge 1 && -n "${1:-}" ]]; then
-    SERVER_PORT="$1"
-    echo "✅ 使用命令行指定端口: $SERVER_PORT"
-fi
-if [ -z "$SERVER_PORT" ]; then
-    SERVER_PORT=$(random_port)
-    echo "⚙️ 未提供端口参数，且未设置默认端口时，使用随机端口: $SERVER_PORT"
-fi
-
-# ---------- 检测架构 ----------
+# 检测架构
 arch_name() {
     local machine
     machine=$(uname -m | tr '[:upper:]' '[:lower:]')
@@ -65,7 +47,7 @@ fi
 BIN_NAME="hysteria-linux-${ARCH}"
 BIN_PATH="./${BIN_NAME}"
 
-# ---------- 下载二进制 ----------
+# 下载二进制
 download_binary() {
     if [ -f "$BIN_PATH" ]; then
         echo "✅ 二进制已存在，跳过下载。"
@@ -78,7 +60,7 @@ download_binary() {
     echo "✅ 下载完成并设置可执行: $BIN_PATH"
 }
 
-# ---------- 生成证书 ----------
+# 生成证书
 ensure_cert() {
     if [ -f "$CERT_FILE" ] && [ -f "$KEY_FILE" ]; then
         echo "✅ 发现证书，使用现有 cert/key。"
@@ -90,28 +72,39 @@ ensure_cert() {
     echo "✅ 证书生成成功。"
 }
 
-# ---------- 写配置文件 ----------
+# 写配置文件
 write_config() {
 cat > server.yaml <<EOF
 listen: ":${SERVER_PORT}"
 tls:
   cert: "$(pwd)/${CERT_FILE}"
   key: "$(pwd)/${KEY_FILE}"
+  alpn:
+    - "${ALPN}"
 auth:
   type: "password"
   password: "${AUTH_PASSWORD}"
+bandwidth:
+  up: "200mbps"
+  down: "200mbps"
+quic:
+  max_idle_timeout: "10s"
+  max_concurrent_streams: 4
+  initial_stream_receive_window: 65536        # 64 KB
+  max_stream_receive_window: 131072           # 128 KB
+  initial_conn_receive_window: 131072         # 128 KB
+  max_conn_receive_window: 262144             # 256 KB
 EOF
-    echo "✅ 写入配置 server.yaml（端口=${SERVER_PORT}, SNI=${SNI}, ALPN=${ALPN}）。"
+    echo "✅ 写入配置 server.yaml（SNI=${SNI}, ALPN=${ALPN}）。"
 }
 
-# ---------- 获取服务器 IP ----------
+# 获取服务器 IP
 get_server_ip() {
-#    IP=$(curl -s --max-time 10 https://api.ipify.org || echo "YOUR_SERVER_IP")
-#    echo "$IP"
-	echo "$(IP)"
+    IP=$(curl -s --max-time 10 https://api.ipify.org || echo "YOUR_SERVER_IP")
+    echo "$IP"
 }
 
-# ---------- 打印连接信息 ----------
+# 打印连接信息
 print_connection_info() {
     local IP="$1"
     echo "🎉 Hysteria2 部署成功！（极简优化版）"
@@ -122,7 +115,7 @@ print_connection_info() {
     echo "   🔑 密码: $AUTH_PASSWORD"
     echo ""
     echo "📱 节点链接（SNI=${SNI}, ALPN=${ALPN}）:"
-    echo "hysteria2://${AUTH_PASSWORD}@${IP}:${SERVER_PORT}?sni=${SNI}&alpn=${ALPN}#Hy2-Bing"
+    echo "hysteria2://${AUTH_PASSWORD}@${IP}:${SERVER_PORT}?sni=${SNI}&alpn=${ALPN}#Demo"
     echo ""
     echo "📄 客户端配置文件:"
     echo "server: ${IP}:${SERVER_PORT}"
@@ -138,20 +131,16 @@ print_connection_info() {
     echo "=========================================================================="
 }
 
-# ---------- 主逻辑 ----------
+# 主流程
 main() {
     download_binary
     ensure_cert
-	get_password
-	write_config
+	gen_password
+    write_config
     SERVER_IP=$(get_server_ip)
     print_connection_info "$SERVER_IP"
     echo "🚀 启动 Hysteria2 服务器..."
     exec "$BIN_PATH" server -c server.yaml
 }
 
-main "$@"
-
-
-
-
+main
