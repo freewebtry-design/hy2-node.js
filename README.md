@@ -1,4 +1,4 @@
-# Hysteria2在Nodejs/Python一键脚本极简部署
+# Hysteria2在Nodejs一键脚本部署
 
 * 在不设置的情况下，支持生成随机端口
 
