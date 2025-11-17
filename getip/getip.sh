@@ -15,7 +15,10 @@
 ## `curl -s --max-time 10 https://ipinfo.io/ip`  --> ok both inside and outside GFW, for ipv4 addr
 ## `curl -s --max-time 10 https://v6.ipinfo.io/ip`  --> ok both inside and outside GFW, for ipv6 addr
 
+## https://ifconfig.me/ --> has some additional info on address
+
 ## `curl -s --max-time 10 https://checkip.amazonaws.com/`  --> ok both inside and outside GFW, for ipv4 addr
+
 
 
 
