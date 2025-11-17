@@ -11,10 +11,12 @@
 
 ## `curl -s --max-time 10 https://api.ipify.org`  --> ok outside GFW, but not inside
 
+## ipinfo.io does have developer's kit, see "https://ipinfo.io/developers"
 ## `curl -s --max-time 10 https://ipinfo.io/ip`  --> ok both inside and outside GFW, for ipv4 addr
 ## `curl -s --max-time 10 https://v6.ipinfo.io/ip`  --> ok both inside and outside GFW, for ipv6 addr
 
 ## `curl -s --max-time 10 https://checkip.amazonaws.com/`  --> ok both inside and outside GFW, for ipv4 addr
+
 
 
 
