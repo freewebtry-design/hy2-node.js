@@ -102,7 +102,7 @@ func init() {
 	- 定义cobra.Command{}结构体
 	- init()中初始化命令的参数, flags等
 	- init(): 其他cmd命令需要挂载到"parent"上, 形成command的Tree结构
-+ rootCmd特别的一点: 需要提过Execute(), 供main.go使用
++ rootCmd特别的一点: 需要提供Execute(), 由main.go使用
 
 
 
