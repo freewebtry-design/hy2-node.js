@@ -176,7 +176,7 @@ func init() {
 + Hidden bool: if true, 则"<cmd>"不会出现在命令列表中(help)
 + Run命令组: 
 	*Run命令的执行按以下先后顺序进行
-		- PersistentPreRun()
+		. PersistentPreRun()
 		- PreRun()
 		- Run()
 		- PostRun()
