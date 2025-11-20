@@ -175,13 +175,13 @@ func init() {
 + Args PostionalArgs: <cmd>的参数, 非flag
 + Hidden bool: if true, 则"<cmd>"不会出现在命令列表中(help)
 + Run命令组:   
-	*Run命令的执行按以下先后顺序进行
+    * Run命令的执行按以下先后顺序进行
 		1. PersistentPreRun()
 		2. PreRun()
 		3. Run()
 		4. PostRun()
 		5. PersistentPostRun()
-	*PreRun和PostRun, 仅在有Run()的情况下才会执行
-	*PersistentPreRun/PersistentPostRun, 所有子命令都会继承, 都会被执行
-	*Run()和RunE()的区别: RunE有error参数返回, Run无返回结果
-	*Run命令组的参数都一致: Run func(cmd *Command, args []string)
+	* PreRun和PostRun, 仅在有Run()的情况下才会执行
+	* PersistentPreRun/PersistentPostRun, 所有子命令都会继承, 都会被执行
+	* Run()和RunE()的区别: RunE有error参数返回, Run无返回结果
+	* Run命令组的参数都一致: Run func(cmd *Command, args []string)
