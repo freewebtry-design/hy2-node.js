@@ -6,7 +6,7 @@
 - [packages](https://pkg.go.dev/github.com/spf13/cobra): go package
 
 ## Cobra程序框架1: 小规模程序
-###程序目录结构
+### 程序目录结构
 ```
 	appName
 		|-> cmd
@@ -105,8 +105,63 @@ func init() {
 + rootCmd特别的一点: 需要提供Execute(), 由main.go使用
 
 
+## Cobra程序框架2: 大规模程序
+### 程序目录结构
+```
+	appName
+		|-> cmd
+			|-- root.go
+		|-> module1
+		|-> module2
+		|-- main.go
+```
+**每个module提供自己的command; cmd/root.go来汇总**
 
+### module1样例
+```go
+package serve
 
+import (
+	"fmt"
+	"github.com/spf13/cobra"
+)
+
+func NewCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "serve",
+		Short: "Run the HTTP server",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			port, _ := cmd.Flags().GetInt("port")
+			fmt.Printf("Serving on :%d\n", port)
+			return nil
+		},
+	}
+	cmd.Flags().Int("port", 8080, "port to listen on")
+	return cmd
+}
+```
+**包含cobra.Command{}结构体初始化、flag设置等***
+
+### cmd/root.go样例
+```go
+package cmd
+
+import (
+	"os"
+	"github.com/spf13/cobra"
+	"example.com/myapp/module1"
+)
+
+var rootCmd = &cobra.Command{Use: "myapp"}
+
+func Execute() { if err := rootCmd.Execute(); err != nil { os.Exit(1) } }
+
+func init() {
+	rootCmd.AddCommand(module1.NewCommand())
+	......
+}
+```
+** 由cmd/root.go调用各个module的NewCommand(), 从而完成Command Tree初始化 **
 
 
 
