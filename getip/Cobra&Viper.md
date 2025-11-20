@@ -5,8 +5,8 @@
 - [Docs](https://cobra.dev/docs/): documentation
 - [packages](https://pkg.go.dev/github.com/spf13/cobra): go package
 
-## Cobra程序框架1: 小规模程序   
-### 程序目录结构
+## Cobra程序框架1: 小规模程序
+###程序目录结构
 ```
 	appName
 		|-> cmd
@@ -94,6 +94,20 @@ func init() {
 	rootCmd.AddCommand(cmd1)
 }
 ```
+
+### Cobra编程习惯
++ 程序目录结构用于表明: 主程序、rootCmd、其他cmd之间的层级关系
++ main.go - 执行rootCmd (cmd.Execute())
++ rootCmd及其他cmd, 分别对应各自的.go file
+	- 定义cobra.Command{}结构体
+	- init()中初始化命令的参数, flags等
+	- init(): 其他cmd命令需要挂载到"parent"上, 形成command的Tree结构
++ rootCmd特别的一点: 需要提过Execute(), 供main.go使用
+
+
+
+
+
 
 
 
