@@ -140,7 +140,7 @@ func NewCommand() *cobra.Command {
 	return cmd
 }
 ```
-**包含cobra.Command{}结构体初始化、flag设置等***
+**包含cobra.Command{}结构体初始化、flag设置等**
 
 ### cmd/root.go样例
 ```go
@@ -161,7 +161,7 @@ func init() {
 	......
 }
 ```
-** 由cmd/root.go调用各个module的NewCommand(), 从而完成Command Tree初始化 **
+**由cmd/root.go调用各个module的NewCommand(), 从而完成Command Tree初始化**
 
 
 
