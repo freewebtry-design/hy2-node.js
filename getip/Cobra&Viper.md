@@ -2,10 +2,12 @@
 
 ## Cobra资源
 - [Github](https://github.com/spf13/cobra): Github repository
-- [Docs](https://cobra.dev/docs/): documentation
-- [packages](https://pkg.go.dev/github.com/spf13/cobra): go package
+- [Docs](https://cobra.dev/docs/): Cobra documentation
+- [packages](https://pkg.go.dev/github.com/spf13/cobra): go.dev package
 
 ## Cobra程序框架1: 小规模程序
+### 程序目录结构
+```
 	appName
 		|-> cmd
 			|-- root.go
@@ -15,6 +17,7 @@
 			|-- ...
 			|-- cmdN.go
 		|-- main.go
+```
 
 ### main.go 说明
 + 主程序(package main)
