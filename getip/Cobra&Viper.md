@@ -72,7 +72,7 @@ func init() {
 }
 ```
 
-### cmd/cmd1.go 说明 - "cmd1"是"rootCmd"的子命令, 类似"git pull"
+### cmd/cmd1.go 说明 - "cmd1"是"rootCmd"的子命令, 类似"git pull"中的"pull"
 + "cmd1"命令代码, 需要构建cobra.Command结构体 
 + 需要"init()", 用于初始化"cmd1"的参数, 比如flags等
 + "init()"中, 需要"rootCmd.AddCommand(cmd1)", 将"cmd1"挂载到"rootCmd"下
