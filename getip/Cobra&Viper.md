@@ -2,11 +2,11 @@
 
 ## Cobra资源
 - [Github](https://github.com/spf13/cobra): Github repository
-- [Docs](https://cobra.dev/docs/): Cobra documentation
-- [packages](https://pkg.go.dev/github.com/spf13/cobra): go.dev package
+- [Docs](https://cobra.dev/docs/): documentation
+- [packages](https://pkg.go.dev/github.com/spf13/cobra): go package
 
 ## Cobra程序框架1: 小规模程序
-### 程序目录结构
+###程序目录结构
 ```
 	appName
 		|-> cmd
@@ -24,7 +24,6 @@
 + import "cmd"
 + 执行"cmd.Execute()"(使用Cobra)
 
-
 ```go
 package main
 
@@ -34,6 +33,45 @@ func main() {
   cmd.Execute()
 }
 ```
+
+### cmd/root.go 说明
++ "root"命令代码, 需要构建cobra.Command结构体
++ 需要"Execute()"(当然可以是其他名字), 由main.go调用
++ 需要"init()", 用于初始化rootCommand的参数, 比如flags等
+
+```go
+var rootCmd = &cobra.Command{
+  Use:   "hugo",
+  Short: "Hugo is a very fast static site generator",
+  Long: `A Fast and Flexible Static Site Generator built with
+                love by spf13 and friends in Go.
+                Complete documentation is available at https://gohugo.io/documentation/`,
+  Run: func(cmd *cobra.Command, args []string) {
+    // Do Stuff Here
+  },
+}
+
+func Execute() {
+  if err := rootCmd.Execute(); err != nil {
+    fmt.Fprintln(os.Stderr, err)
+    os.Exit(1)
+  }
+}
+
+func init() {
+	cobra.OnInitialize(initConfig)
+
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
+	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
+	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
+	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
+	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
+	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
+	viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
+	viper.SetDefault("license", "apache")
+}
+```
+
 
 
 
