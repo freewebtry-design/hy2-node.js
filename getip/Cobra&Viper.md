@@ -164,5 +164,24 @@ func init() {
 **由cmd/root.go调用各个module的NewCommand(), 从而完成Command Tree初始化**
 
 
+## Cobra.Command{}说明
+参考[type Command](https://pkg.go.dev/github.com/spf13/cobra#Command)
 
-
+### 常用/常见字段
++ Use string: Command/SubCommand 字符串, 显示用法时: "git pull" - git 和 pull 都是"Use"
++ Short string: "<cmd> help"时显示, 短字符串
++ Long string: "help <cmd>"时显示, 长字符串
++ GroupID string: 命令成组时的"组ID"
++ Args PostionalArgs: <cmd>的参数, 非flag
++ Hidden bool: if true, 则"<cmd>"不会出现在命令列表中(help)
++ Run命令组: 
+	*Run命令的执行按以下先后顺序进行
+		- PersistentPreRun()
+		- PreRun()
+		- Run()
+		- PostRun()
+		- PersistentPostRun()
+	*PreRun和PostRun, 仅在有Run()的情况下才会执行
+	*PersistentPreRun/PersistentPostRun, 所有子命令都会继承, 都会被执行
+	*Run()和RunE()的区别: RunE有error参数返回, Run无返回结果
+	*Run命令组的参数都一致: Run func(cmd *Command, args []string)
