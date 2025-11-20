@@ -35,9 +35,9 @@ func main() {
 ```
 
 ### cmd/root.go 说明
-+ "root"命令代码, 需要构建cobra.Command结构体
++ "rootCmd"命令代码, 需要构建cobra.Command结构体 --> "rootCmd"可以是其他名字
 + 需要"Execute()"(当然可以是其他名字), 由main.go调用
-+ 需要"init()", 用于初始化rootCommand的参数, 比如flags等
++ 需要"init()", 用于初始化"rootCmd"的参数, 比如flags等
 
 ```go
 var rootCmd = &cobra.Command{
@@ -72,7 +72,28 @@ func init() {
 }
 ```
 
+### cmd/cmd1.go 说明 - "cmd1"是"rootCmd"的子命令, 类似"git pull"
++ "cmd1"命令代码, 需要构建cobra.Command结构体 
++ 需要"init()", 用于初始化"cmd1"的参数, 比如flags等
++ "init()"中, 需要"rootCmd.AddCommand(cmd1)", 将"cmd1"挂载到"rootCmd"下
 
+```go
+var cmd1 = &cobra.Command{
+  Use:   "hello",
+  Short: "......",
+  Long: "......",
+  Run: func(cmd *cobra.Command, args []string) {
+    // Do Stuff Here
+  },
+}
+
+func init() {
+	cmd1.PersistentFlags().StringVar(...)
+	...
+
+	rootCmd.AddCommand(cmd1)
+}
+```
 
 
 
